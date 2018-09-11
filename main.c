@@ -2,9 +2,8 @@
 #include <stdlib.h>
 
 //lex.yy.h
-int yylex();
-extern char *yytext;
 extern FILE *yyin;
+int yyparse();
 
 
 int isRunning(void);
@@ -28,14 +27,10 @@ int main(int argc, char** argv)
     }
 
     initMe();
-    while (isRunning())
-    {
-        token = yylex();
-        if(!isRunning()) {
-            break;
-        }
-       fprintf(stderr," Na linha %d temos o lexema \" %s \" que representa o token %d\n", getLineNumber(), yytext, token);
-    }
+    yyparse();
+
+    fprintf(stderr, "Parser Complete!");
     printf("\n");
-    return 1;
+
+    exit(0);
 }

@@ -1,22 +1,35 @@
-2a = "this is a string."; c2_ = "this is another string!";
-print c2_;
+// UFRGS - Compiladores - Marcelo Johann - 2018/2
 
+int main db
+  {
+  a = 7;
+  v qap = 90;
+  print vqap;
 
+  print "Digite um numero: \n";
+  read a;
+  while i<10
+    {
+    i = incndi,1b;
+    a = incnd'a',1b;
+    };
 
-// this is a one line comment
-/* this is a
-multiple lines comment!
-*/
+  print "Incrementado algumas vezes fica ",a,"\n";
 
+  if a==5 then 
+    print "Parou no meio\n";
 
+  if d a==11 or a== 17 b then
+    print "Var a ficou 11 ou 17\n";
 
+  if da==10b then else
+    ;
+  ;;;
+  {;};
+  {};
+  }
 
-int main d char argv b {
-	return 2 + 2;
-}
-
-float 12.5 * char 'A';
-
-if var1 then var2 else var3;
-
-var1 <= var2;
+int incn d int x, int n b
+  {
+  return x+n;
+  }
