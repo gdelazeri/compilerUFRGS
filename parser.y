@@ -48,9 +48,6 @@
 %left '+' '-'
 %left '*' '/'
 
-%nonassoc "then"
-%nonassoc "else"
-
 %%
 
 /* Language Rules */
@@ -127,7 +124,7 @@ attribution:
 ;
 
 controlFlow:
-    KW_IF expression KW_THEN command   %prec "then" { $$ = ast_create(AST_IF, 0, $2, $4, 0, 0); }
+    KW_IF expression KW_THEN command { $$ = ast_create(AST_IF, 0, $2, $4, 0, 0); }
     | KW_IF expression KW_THEN command KW_ELSE command { $$ = ast_create(AST_IF_ELSE, 0, $2, $4, $6, 0); }
     | KW_WHILE expression command { $$ = ast_create(AST_WHILE, 0, $2, $3, 0, 0); }
 ;
