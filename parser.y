@@ -44,6 +44,7 @@
 
 %start program
 
+%right KW_THEN KW_ELSE
 %left '<' '>' '!' OPERATOR_LE OPERATOR_GE OPERATOR_EQ OPERATOR_NOT OPERATOR_AND OPERATOR_OR
 %left '+' '-'
 %left '*' '/'
