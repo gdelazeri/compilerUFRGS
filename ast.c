@@ -270,7 +270,7 @@ void ast_decompile(FILE *file, AST *node) {
         ast_decompile(file, node->son[0]);
         fprintf(file, " then\n");
         ast_decompile(file, node->son[1]);
-        fprintf(file, "else\n");
+        fprintf(file, " else\n");
         ast_decompile(file, node->son[2]);
         break;
       case AST_WHILE:
