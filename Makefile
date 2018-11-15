@@ -1,5 +1,5 @@
 #
-# UFRGS - Compiladores B - Marcelo Johann - 2009/2 - Etapa 1
+# UFRGS - Compiladores B - Marcelo Johann - 2018/2 - Etapa 4
 #
 # Makefile for single compiler call
 # All source files must be included from code embedded in scanner.l
@@ -7,15 +7,23 @@
 # and #include "main.c" in the last part of the scanner.l
 #
 
-etapa1: lex.yy.o main.o hash.o
-	gcc -o etapa1 lex.yy.o main.o hash.o
+etapa4: y.tab.o lex.yy.o main.o hash.o ast.o semantic.o
+	gcc -o etapa4 lex.yy.o main.o hash.o ast.o semantic.o y.tab.o
 main.o: main.c
 	gcc -c main.c
+semantic.o: semantic.c
+	gcc -c semantic.c
+ast.o: ast.c
+	gcc -c ast.c
 hash.o: hash.c
 	gcc -c hash.c
 lex.yy.o: lex.yy.c
 	gcc -c lex.yy.c
 lex.yy.c: scanner.l
 	flex --header-file=lex.yy.h scanner.l 
+y.tab.o: y.tab.c
+	gcc -c y.tab.c
+y.tab.c: parser.y
+	yacc -d parser.y
 clean:
-	rm *.o lex.yy.c etapa1
+	rm *.o lex.yy.c lex.yy.h y.tab.c y.tab.h etapa4

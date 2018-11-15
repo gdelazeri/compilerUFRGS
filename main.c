@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "ast.h"
+#include "semantic.h"
+extern AST* astTree;
 
 //lex.yy.h
-int yylex();
-extern char *yytext;
 extern FILE *yyin;
+int yyparse();
 
 
 int isRunning(void);
@@ -16,26 +18,30 @@ int main(int argc, char** argv)
     int token = 0;
     if(argc < 2) {
         fprintf(stderr, "Erro, falta 1 argumento! Indique o nome do arquivo a ser lido");
-        exit(0);
+        exit(1);
     }
 
     FILE* file = fopen(argv[1],"r");
     if(file == NULL) {
         fprintf(stderr, "Erro, ao ler arquivo!");
-        exit(1);
+        exit(2);
     } else {
         yyin = file;
     }
 
     initMe();
-    while (isRunning())
+    yyparse();
+
+    if (foundSemanticError() == 1)
     {
-        token = yylex();
-        if(!isRunning()) {
-            break;
-        }
-       fprintf(stderr," Na linha %d temos o lexema \" %s \" que representa o token %d\n", getLineNumber(), yytext, token);
+        fprintf(stderr, "Semantic ERROR(s) found: unable to compile\n");
+        exit(4);
     }
+    fprintf(stderr, "Semantic check finished successfully!\n");
+    
+
+    fprintf(stderr, "Parser Complete!");
     printf("\n");
-    return 1;
+
+    exit(0);
 }

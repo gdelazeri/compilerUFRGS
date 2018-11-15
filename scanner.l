@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
-#include "tokens.h"
-#include "hash.h"
+#include "ast.h"
+#include "y.tab.h"
 
 int running = 1;
 int lineNumber = 1;
@@ -9,6 +9,7 @@ int lineNumber = 1;
 int isRunning();
 void initMe();
 int getLineNumber();
+int yyparse();
 
 %}
 
@@ -40,13 +41,13 @@ int getLineNumber();
 "=="						{ return OPERATOR_EQ; }
 
  /* Identifier */ 
-[ace-or-zA-Z_0-9]*[ace-or-zA-Z_]+[ace-or-zA-Z_0-9]*	{ hashInsert(TK_IDENTIFIER, yytext); return TK_IDENTIFIER; }
+[ace-or-zA-Z_0-9]*[ace-or-zA-Z_]+[ace-or-zA-Z_0-9]*	{ yylval.symbol = hashInsert(SYMBOL_IDENTIFIER, yytext); return TK_IDENTIFIER; }
 
  /* Literals */
-[0-9]*						{ hashInsert(LIT_INTEGER, yytext); return LIT_INTEGER; }
-[0-9]+"."[0-9]+				{ hashInsert(LIT_FLOAT, yytext); return LIT_FLOAT; }
-\'[^']\'					{ hashInsert(LIT_CHAR, yytext); return LIT_CHAR; }
-\"[^"]*\"                   { hashInsert(LIT_STRING, yytext); return LIT_STRING; }
+[0-9]*						{ yylval.symbol = hashInsert(SYMBOL_LIT_INTEGER, yytext); return LIT_INTEGER; }
+[0-9]+"."[0-9]+				{ yylval.symbol = hashInsert(SYMBOL_LIT_FLOAT, yytext); return LIT_FLOAT; }
+\'[^']\'					{ yylval.symbol = hashInsert(SYMBOL_LIT_CHAR, yytext); return LIT_CHAR; }
+\"[^"]*\"                   { yylval.symbol = hashInsert(SYMBOL_LIT_STRING, yytext); return LIT_STRING; }
 
  /* One line comment and multiple lines comment */
 "//".*                      { }
@@ -64,6 +65,8 @@ int getLineNumber();
 .							{ return TOKEN_ERROR; }
 
 %%
+
+ /* Subroutines */
 
 int yywrap() {
 	running = 0;

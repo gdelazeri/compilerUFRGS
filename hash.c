@@ -5,7 +5,7 @@
 
 HASH_NODE *Table[HASH_SIZE];
 
-void hashInit(void){
+void hashInit(void) {
     for (int i=0; i<HASH_SIZE; ++i) {
         Table[i] = 0;
     }
@@ -58,4 +58,20 @@ void hashPrint(void) {
             fprintf(stderr, "Table[%d] has %s\n", i, node->text);
         }
     }
+}
+
+int checkUndeclared() {
+    int i;
+    HASH_NODE *node;
+
+    for (i = 0; i < HASH_SIZE; i++) {
+        for (node = Table[i]; node != NULL; node = node->next) {
+            if (node->type == SYMBOL_IDENTIFIER)
+            {
+                fprintf(stderr, "Semantic ERROR: symbol %s not declared.\n", node->text);
+                return 1;
+            }
+        }
+    }
+    return 0;
 }

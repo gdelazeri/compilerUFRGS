@@ -1,0 +1,53 @@
+int x = 12;
+int z q 12 p: 5 10 6 'a';
+int olar q 34 p;
+
+int main d  b 
+{
+a = 7;
+v q a p = 90;
+print v q a p;
+print "Digite um numero: \n";
+read a;
+while i < 10
+{
+i = incn d i, 1 b;
+a = incn d 'a', 1 b;
+};
+print "Incrementado algumas vezes fica ", a, "\n";
+if a == 5 then
+print "Parou no meio\n";
+if d a == 11 or a == 17 b then
+print "Var a ficou 11 ou 17\n";
+if d a == 10 b then
+else
+;
+;
+;
+;
+{
+;
+};
+{
+};
+}
+
+int incn d  int x, int n b 
+{
+return x + n;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
