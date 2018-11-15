@@ -14,7 +14,7 @@ void semanticCheck(AST *node) {
 
     if (undeclaredError == 1) semanticError = 1;
     checkUsage(node);
-    //checkOperations(node);
+    checkOperations(node);
 }
 
 
@@ -140,4 +140,23 @@ void checkUsage(AST *node) {
 
     for (i = 0; i < MAX_SONS; ++i)
         checkUsage(node->son[i]);
+}
+
+// devem ser verificados onde forem usados, em expressões aritméticas, relacionais, lógicas, ou para índices de vetores;
+void checkOperations(AST *node)  {
+    if (!node) 
+        return;
+
+    // verificar se ambos os lados são do mesmo tipo. Mas como saber o tipo?
+    if (node->type == AST_LE || node->type == AST_GE || node->type == AST_EQ || node->type == AST_LT || node->type == AST_GT) {
+
+    } else if (node->type == AST_AND || node->type == AST_AND) {
+
+    } else if (node->type == AST_NOT) {
+
+    } else if (node->type == AST_ADD || node->type == AST_SUB || node->type == AST_MUL || node->type == AST_DIV) {
+
+    }
+    for (int i = 0; i < MAX_SONS; ++i)
+        checkOperations(node->son[i]);
 }
