@@ -156,7 +156,7 @@ expression:
     | expression OPERATOR_EQ expression { $$ = ast_create(AST_EQ, 0, $1, $3, 0, 0); }
     | expression OPERATOR_OR expression { $$ = ast_create(AST_OR, 0, $1, $3, 0, 0); }
     | expression OPERATOR_AND expression { $$ = ast_create(AST_AND, 0, $1, $3, 0, 0); }
-    | expression OPERATOR_NOT expression { $$ = ast_create(AST_NOT, 0, $1, $3, 0, 0); }
+    | OPERATOR_NOT expression { $$ = ast_create(AST_NOT, 0, $2, 0, 0, 0); }
     | expression '+' expression { $$ = ast_create(AST_ADD, 0, $1, $3, 0, 0); }
     | expression '-' expression { $$ = ast_create(AST_SUB, 0, $1, $3, 0, 0); }
     | expression '*' expression { $$ = ast_create(AST_MUL, 0, $1, $3, 0, 0); }

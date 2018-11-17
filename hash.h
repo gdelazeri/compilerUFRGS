@@ -13,8 +13,10 @@
 #define TYPE_VECTOR     	2
 #define TYPE_FUNCTION		3
 
-#define DATATYPE_INTEGER 1
-#define DATATYPE_FLOAT 2
+#define DATATYPE_UNDEFINED 1
+#define DATATYPE_INTEGER 2
+#define DATATYPE_FLOAT 3
+#define DATATYPE_BOOL 4
 
 typedef struct hash_node {
     int type;
