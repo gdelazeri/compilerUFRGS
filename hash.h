@@ -9,14 +9,14 @@
 #define SYMBOL_LIT_STRING	4
 #define SYMBOL_IDENTIFIER	5
 
-#define TYPE_SCALAR     	1
-#define TYPE_VECTOR     	2
-#define TYPE_FUNCTION		3
+#define TYPE_SCALAR     	6
+#define TYPE_VECTOR     	7
+#define TYPE_FUNCTION		8
 
-#define DATATYPE_UNDEFINED 1
-#define DATATYPE_INTEGER 2
-#define DATATYPE_FLOAT 3
-#define DATATYPE_BOOL 4
+#define DATATYPE_UNDEFINED 9
+#define DATATYPE_INTEGER 10
+#define DATATYPE_FLOAT 11
+#define DATATYPE_BOOL 12
 
 typedef struct hash_node {
     int type;

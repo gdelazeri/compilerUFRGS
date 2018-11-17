@@ -173,11 +173,7 @@ void checkOperations(AST *node)  {
         node->dataType = DATATYPE_FLOAT;
     }
     else if (node->type == AST_SYMBOL) {
-        node->dataType = node->symbol->dataType;
-        fprintf(stderr, "ACHEI UM SYMBOL\n");
-        fprintf(stderr, "Ident: %s\n", node->symbol->text);
-        fprintf(stderr, "DataType: %d\n", node->dataType);
-        
+        node->dataType = node->symbol->dataType;       
     }
     else if (node->type == AST_VECTOR || node->type == AST_FUNCTION_CALL) {
         node->dataType = node->son[0]->dataType;
@@ -188,7 +184,6 @@ void checkOperations(AST *node)  {
     }
     else if (node->type == AST_GLOBAL_VECTOR_VALUES) {
         node->dataType = node->son[0]->dataType;
-        fprintf(stderr, "OLHA EU AQUI %d\n", node->dataType);
         if (node->son[1]) {
             if (node->dataType != node->son[1]->dataType) {
                 node->dataType = DATATYPE_UNDEFINED;
@@ -204,8 +199,7 @@ void checkOperations(AST *node)  {
     else if (node->type == AST_GLOBAL_VECTOR) {
         if (node->son[3] != NULL) {
             if (node->son[1]->dataType != node->son[3]->dataType) {
-                fprintf(stderr, "VALOR DO IDENT %d\n", node->son[1]->dataType);
-                fprintf(stderr, "VALOR DOS VALORES %d\n", node->son[3]->dataType);
+                fprintf(stderr, "Semantic ERROR: incompatible types. Line %d\n", node->line);
                 semanticError = 1;
             }
         }
@@ -270,6 +264,9 @@ void checkOperations(AST *node)  {
         node->dataType = node->son[0]->dataType;
     }
     else if (node->type == AST_PARENTHESES) {
+        node->dataType = node->son[0]->dataType;
+    }
+    else if (node->type == AST_FUNCTION_PARAM) {
         node->dataType = node->son[0]->dataType;
     }
     else if (node->type == AST_LOCAL_SCALAR) {
@@ -366,9 +363,9 @@ int funcArgumentsCheck(AST *funcCall) {
         return 0;
     }
 
-    AST *parameters = funcDeclaration->son[1];
+    AST *parameters = funcDeclaration->son[2];
     AST *arguments = funcCall->son[1];
-
+ 
     while (parameters && arguments) {
         if (parameters->son[0]->dataType != arguments->son[0]->dataType) {
             fprintf(stderr, "Semantic ERROR: argument type mismatch. Line %d\n", funcCall->line);
