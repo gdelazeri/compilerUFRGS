@@ -87,6 +87,7 @@ void setTypeIdentifiers(AST *node) {
                 node->son[1]->symbol->dataType = DATATYPE_FLOAT;
             if (node->son[0]->type == AST_KW_INT) 
                 node->son[1]->symbol->dataType = DATATYPE_INTEGER;
+            node->dataType = node->son[1]->symbol->dataType;
             node->son[1]->symbol->type = TYPE_SCALAR;
         }
     }
