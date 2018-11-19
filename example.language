@@ -10,7 +10,7 @@ char x = 65;
 int main db
   {
   a = 7;
-  v qap = v q9+2p;
+  v qap = 90;
   print vqap;
 
   print "Digite um numero: \n";
@@ -18,12 +18,12 @@ int main db
   while i<10
     {
     i = incndi,1b;
-    a = incnda,1b;
+    i = i + 1;
     };
 
   print "Incrementado algumas vezes fica ",a,"\n";
 
-  if a==5 then 
+  if not a==5 then 
     print "Parou no meio\n";
 
   if d a==11 or a== 17 b then
@@ -38,7 +38,7 @@ int main db
 
   int incn d int xa, int n b
   {
-  return x+n;
+  return xa+n;
   }
 
 

@@ -143,14 +143,11 @@ TAC* TACGenerate(AST *node) {
 
         // global assignments
         case AST_GLOBAL_SCALAR:
-            return TACCreate(TAC_GLOBAL_SCALAR, node->son[1]->symbol,
-                code[2]? code[2]->res : NULL, NULL);
         case AST_GLOBAL_VECTOR:
-            return TACJoin(TACCreate(TAC_GLOBAL_VECTOR, node->son[1]->symbol,
-                code[2]? code[2]->res : NULL, NULL), code[3]);
+            return TACGenerateGlobalAssig(node->son[1]->symbol, code, node->type);
+        
         case AST_GLOBAL_VECTOR_VALUES:
-            return TACJoin(TACCreate(TAC_VECTOR_DECLARATION, code[0]? code[0]->res : NULL, NULL, NULL),
-                code[1]);
+            return TACGenerateGlobalAssig(NULL, code, node->type);
             
         // binary operations
         case AST_ADD:
@@ -225,7 +222,7 @@ TAC* TACGenerate(AST *node) {
 }
 
 TAC* TACGenerateBinOp(int type, TAC* op1, TAC* op2) {
-    HASH_NODE* temp = hashCreateTemp();
+    HASH_NODE* temp = makeTemp();
     TAC* result = TACCreate(type, temp,
         op1? op1->res : NULL,
         op2? op2->res : NULL);
@@ -234,7 +231,7 @@ TAC* TACGenerateBinOp(int type, TAC* op1, TAC* op2) {
 }
 
 TAC* TACGenerateUnaOp(int type, TAC* op1) {
-    HASH_NODE* temp = hashCreateTemp();
+    HASH_NODE* temp = makeTemp();
     TAC* result = TACCreate(type, temp,
         op1? op1->res : NULL,
         NULL);
@@ -243,7 +240,7 @@ TAC* TACGenerateUnaOp(int type, TAC* op1) {
 }
 
 TAC* TACGenerateReadVector(HASH_NODE* symbol, TAC* code[]) {
-    HASH_NODE* temp = hashCreateTemp();
+    HASH_NODE* temp = makeTemp();
     TAC* index = code[1];
     TAC* read = TACCreate(TAC_VECTOR, temp,
         symbol, index? index->res : NULL); 
@@ -287,15 +284,7 @@ TAC* TACGenerateParameter(HASH_NODE* symbol, TAC* code[]) {
 }
 
 TAC* TACGenerateIf(TAC* code[]) {   
-    /*
-        *** GOTO JUMP_ADDR IF CONDITION IS FALSE ***
-
-            ifz jump_addr condition
-            [ifblock]
-        jump_addr:
-            ...
-    */
-    HASH_NODE* _jumpAddr = hashCreateLabel();
+    HASH_NODE* _jumpAddr = makeLabel();
     TAC* jumpAddr = TACCreate(TAC_LABEL, _jumpAddr, NULL, NULL);    
 
     TAC* condition = code[0];
@@ -308,20 +297,10 @@ TAC* TACGenerateIf(TAC* code[]) {
 }
 
 TAC* TACGenerateIfElse(TAC* code[]) {
-    /*
-            ifz else_add condition
-            [then block]
-            jmp continue
-        else_addr:
-            [else block]
-        continue:
-            ...
-    */
-
-    HASH_NODE* _elseAddr = hashCreateLabel();
+    HASH_NODE* _elseAddr = makeLabel();
     TAC* elseAddr = TACCreate(TAC_LABEL, _elseAddr, NULL, NULL);
 
-    HASH_NODE* _continueAddr = hashCreateLabel();
+    HASH_NODE* _continueAddr = makeLabel();
     TAC* continueAddr = TACCreate(TAC_LABEL, _continueAddr, NULL, NULL);
 
     TAC* condition = code[0];
@@ -338,22 +317,14 @@ TAC* TACGenerateIfElse(TAC* code[]) {
 }
 
 TAC* TACGenerateWhile(TAC* code[]) {
-    /*
-        _whileStart:
-            ifz _whileEnd condition
-            [command]
-            jmp _whileStart
-        _whileEnd:
-
-    */
     TAC* condition = code[0];
     TAC* command = code[1];
 
-    HASH_NODE* _whileStart = hashCreateLabel();
+    HASH_NODE* _whileStart = makeLabel();
     TAC* whileStart = TACCreate(TAC_LABEL, _whileStart, NULL, NULL);
 
 
-    HASH_NODE* _whileEnd = hashCreateLabel();
+    HASH_NODE* _whileEnd = makeLabel();
     TAC* whileEnd = TACCreate(TAC_LABEL, _whileEnd, NULL, NULL);
 
     TAC* ifz = TACCreate(TAC_IFZ, _whileEnd,
@@ -371,7 +342,7 @@ TAC* TACGenerateRead(HASH_NODE* symbol) {
 TAC* TACGenerateFunCall(HASH_NODE* symbol, TAC* code[]) {
     TAC* args = code[1];
     
-    HASH_NODE* result = hashCreateTemp();
+    HASH_NODE* result = makeTemp();
     TAC* call = TACCreate(TAC_CALL, result, symbol, NULL);
 
     return TACJoin(args, call);
@@ -398,4 +369,29 @@ TAC* TACGeneratePrint(TAC* code[]) {
     TAC* argument = TACCreate(TAC_PRINT, arg1? arg1->res : NULL, NULL, NULL);
 
     return TACJoin(TACJoin(arg1, argument), arglist);
+}
+
+TAC* TACGenerateGlobalAssig(HASH_NODE* symbol, TAC* code[], int type) {
+    if (type == AST_GLOBAL_SCALAR) {
+        TAC* value = code[2];
+        TAC* assignment = TACCreate(TAC_GLOBAL_SCALAR, symbol,
+        value? value->res : NULL, NULL);
+
+        return TACJoin(value, assignment);
+    }
+    else if (type == AST_GLOBAL_VECTOR) {
+        TAC* index = code[2];
+        TAC* assignment = TACCreate(TAC_GLOBAL_VECTOR, symbol,
+            index? index->res : NULL, NULL);
+
+        return TACJoin(TACJoin(index, assignment), code[3]);
+    }
+    else if (type == AST_GLOBAL_VECTOR_VALUES) {
+        TAC* value = code[0];
+        TAC* declaration = TACCreate(TAC_VECTOR_DECLARATION, value? value->res : NULL,
+            NULL, NULL);
+        
+        return TACJoin(TACJoin(value, declaration), code[1]);
+    }
+
 }

@@ -76,7 +76,7 @@ int checkUndeclared() {
     return 0;
 }
 
-HASH_NODE* hashCreateTemp()
+HASH_NODE* makeTemp()
 {
     static int tempCount = 0;
     char buffer[256];
@@ -90,7 +90,7 @@ HASH_NODE* hashCreateTemp()
     return result;
 }
 
-HASH_NODE* hashCreateLabel()
+HASH_NODE* makeLabel()
 {
     static int labelCount = 0;
     static char buffer[256];

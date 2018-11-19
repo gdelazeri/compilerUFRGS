@@ -76,5 +76,6 @@ TAC* TACGenerateFunCall(HASH_NODE* symbol, TAC* code[]);
 TAC* TACGenerateReturn(TAC* code[]);
 TAC* TACGenerateArgument(TAC* code[]);
 TAC* TACGeneratePrint(TAC* code[]);
+TAC* TACGenerateGlobalAssig(HASH_NODE* symbol, TAC* code[], int type);
 
 #endif
